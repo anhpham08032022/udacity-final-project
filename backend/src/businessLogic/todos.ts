@@ -46,3 +46,8 @@ export async function getSignedUploadUrl(todoId: string): Promise<string> {
 function getAttachmentUrl(attachmentId: string): string {
     return `https://${bucketName}.s3.amazonaws.com/${attachmentId}`
 }
+
+//enhancement section
+export async function filterDoneIsFalse(): Promise<TodoItem[]> {
+    return await todosAccess.filterDoneIsFalse()
+}

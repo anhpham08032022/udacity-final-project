@@ -98,6 +98,22 @@ export class TodosAccess {
         Expires: parseInt(this.urlExpiration)
       })
     }
+    // enhancement section
+    async filterDoneIsFalse(): Promise<TodoItem[]> {
+        logger.info(`Get all todo items that has not done`)
+        const result = await this.docClient.scan({
+            TableName: this.todosTable,
+            FilterExpression: 'done = :done',
+            ExpressionAttributeValues: {
+                ':done': false
+            },
+        }).promise()
+
+        const items = result.Items
+        logger.info(`There are ${items.length} items found.`)
+
+        return items as TodoItem[]
+    }
 }
 
 function createDynamoDBClient() {
