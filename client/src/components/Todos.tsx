@@ -2,6 +2,7 @@ import dateFormat from 'dateformat'
 import { History } from 'history'
 import update from 'immutability-helper'
 import * as React from 'react'
+import moment from 'moment'
 import {
   Button,
   Checkbox,
@@ -91,7 +92,10 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   async componentDidMount() {
     try {
-      const todos = await getTodos(this.props.auth.getIdToken())
+      let todos = await getTodos(this.props.auth.getIdToken())
+      todos.forEach(todo => {
+        todo.isDisabled = this.isDisabledCheckbox(todo.dueDate);
+      })
       this.setState({
         todos,
         loadingTodos: false
@@ -166,6 +170,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                 <Checkbox
                   onChange={() => this.onTodoCheck(pos)}
                   checked={todo.done}
+                  disabled={todo.isDisabled}
                 />
               </Grid.Column>
               <Grid.Column width={10} verticalAlign="middle">
@@ -210,5 +215,14 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     date.setDate(date.getDate() + 7)
 
     return dateFormat(date, 'yyyy-mm-dd') as string
+  }
+
+  isDisabledCheckbox(dueDate: string): boolean {
+    let currentDate = moment().format('YYYY-MM-DD');
+    let a = moment(dueDate);
+    let b = moment(currentDate);
+    let days = a.diff(b, 'days');
+    console.log(`DAYS: ${days}`)
+    return days < 0;
   }
 }
