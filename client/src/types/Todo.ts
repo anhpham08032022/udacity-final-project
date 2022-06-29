@@ -6,4 +6,5 @@ export interface Todo {
   done: boolean
   attachmentUrl?: string
   isDisabled: boolean
+  className: string
 }

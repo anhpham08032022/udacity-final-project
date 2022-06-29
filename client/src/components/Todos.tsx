@@ -94,7 +94,12 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     try {
       let todos = await getTodos(this.props.auth.getIdToken())
       todos.forEach(todo => {
-        todo.isDisabled = this.isDisabledCheckbox(todo.dueDate);
+        todo.isDisabled = this.isDisabledCheckbox(todo.dueDate, todo.done);
+        if (todo.isDisabled) {
+          todo.className = 'todo-disabled'
+        } else {
+          todo.className = 'todo-nondisabled'
+        }
       })
       this.setState({
         todos,
@@ -166,7 +171,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         {this.state.todos.map((todo, pos) => {
           return (
             <Grid.Row key={todo.todoId}>
-              <Grid.Column width={1} verticalAlign="middle">
+              <Grid.Column width={1} verticalAlign="middle" className={todo.className}>
                 <Checkbox
                   onChange={() => this.onTodoCheck(pos)}
                   checked={todo.done}
@@ -184,6 +189,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                   icon
                   color="blue"
                   onClick={() => this.onEditButtonClick(todo.todoId)}
+                  disabled={todo.isDisabled}
                 >
                   <Icon name="pencil" />
                 </Button>
@@ -193,6 +199,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
                   icon
                   color="red"
                   onClick={() => this.onTodoDelete(todo.todoId)}
+                  disabled={todo.isDisabled}
                 >
                   <Icon name="delete" />
                 </Button>
@@ -217,12 +224,12 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     return dateFormat(date, 'yyyy-mm-dd') as string
   }
 
-  isDisabledCheckbox(dueDate: string): boolean {
+  isDisabledCheckbox(dueDate: string, done: boolean): boolean {
     let currentDate = moment().format('YYYY-MM-DD');
     let a = moment(dueDate);
     let b = moment(currentDate);
     let days = a.diff(b, 'days');
     console.log(`DAYS: ${days}`)
-    return days < 0;
+    return days < 0 && done;
   }
 }

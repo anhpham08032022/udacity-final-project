@@ -12,3 +12,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+div.todo-disabled> div.disabled {
+  background-color: #2196F3;
+}
+
+div.todo-nondisabled> div.checkbox {
+  background-color: green;
+}
