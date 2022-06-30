@@ -11,7 +11,7 @@ exports.handler = async function() {
     console.log("Received todo items:", todoItems);
     todoItems.forEach(item => {
         if (isOneDayLeft(item.dueDate)) {
-            let msg = `Hi ${item.userId}. Your ${item.name} has one day left, please proceed.`;
+            let msg = `Hi ${item.userId}. Your task [${item.name}] has one day left, please proceed.`;
             console.log(`Send notification with message: ${msg}`)
             var params = {
                 Message: msg, 
