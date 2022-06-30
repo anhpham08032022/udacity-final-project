@@ -100,14 +100,11 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
   async componentDidMount() {
     try {
       const todos = await (await getTodos(this.props.auth.getIdToken()))
+      // enhancement part
       todos.forEach(todo => {
-        todo.isDisabled = this.isDisabledCheckbox(todo.dueDate, todo.done);
-        if (todo.isDisabled) {
-          todo.className = 'todo-disabled'
-        } else {
-          todo.className = 'todo-nondisabled'
-        }
+        todo.isDisabled = this.isDisabledCheckbox(todo.dueDate);
       })
+      // end
       this.setState({
         todos,
         loadingTodos: false
@@ -178,11 +175,11 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
         {this.state.todos.map((todo, pos) => {
           return (
             <Grid.Row key={todo.todoId}>
-              <Grid.Column width={1} verticalAlign="middle" className={todo.className}>
+              <Grid.Column width={1} verticalAlign="middle">
                 <Checkbox
                   onChange={() => this.onTodoCheck(pos)}
                   checked={todo.done}
-                  disabled={todo.isDisabled}
+                  disabled={todo.isDisabled} // enhancement part
                 />
               </Grid.Column>
               <Grid.Column width={10} verticalAlign="middle">
@@ -231,13 +228,12 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     return dateFormat(date, 'yyyy-mm-dd') as string
   }
 
-  isDisabledCheckbox(dueDate: string, done: boolean): boolean {
+  isDisabledCheckbox(dueDate: string): boolean {
     let currentDate = moment().format('YYYY-MM-DD');
     let a = moment(dueDate);
     let b = moment(currentDate);
     let days = a.diff(b, 'days');
-    console.log(`DAYS: ${days}`)
-    return days < 0 && done;
+    return days < 0;
   }
 
   isTodoEmpty(todoName: string): boolean {
