@@ -7,6 +7,7 @@ const region = process.env.REGION
 exports.handler = async function() {
     AWS.config.update({region: region});
     const topicArn = "arn:aws:sns:" + region + ":" + accountId + ":" + snsWarningTopic;
+    // get todo items which has undone
     var todoItems = await filterDoneIsFalse();
     console.log("Received todo items:", todoItems);
     todoItems.forEach(item => {
