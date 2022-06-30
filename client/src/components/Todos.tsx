@@ -99,7 +99,7 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
 
   async componentDidMount() {
     try {
-      let todos = await getTodos(this.props.auth.getIdToken())
+      const todos = await (await getTodos(this.props.auth.getIdToken()))
       todos.forEach(todo => {
         todo.isDisabled = this.isDisabledCheckbox(todo.dueDate, todo.done);
         if (todo.isDisabled) {
@@ -251,4 +251,5 @@ export class Todos extends React.PureComponent<TodosProps, TodosState> {
     const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     return specialChars.test(todoName);
   }
+
 }

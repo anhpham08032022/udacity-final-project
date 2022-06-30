@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
+import './custom-checkbox-radio.css'
 import * as serviceWorker from './serviceWorker'
 import 'semantic-ui-css/semantic.min.css'
 import { makeAuthRouting } from './routing';
